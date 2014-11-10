@@ -1,4 +1,4 @@
-create or replace function p3a(cusname char, cusprovince char) returns void as $$
+create or replace function p3a(cusname char, cusprovince char, crlim float8) returns void as $$
 declare
 	c_account char(10);
 	n_account char(10);
@@ -31,7 +31,7 @@ begin
 
 	temp := temp+1;
 	n_account := 'A'||temp;
-	insert into customer values (n_account,cusname,cusprovince,0,1000);
+	insert into customer values (n_account,cusname,cusprovince,0,crlim);
 	select * from customer into c_account, c_cname, c_province, c_cbalance, c_crlimit 
 		where account = n_account;
 	raise notice ' ';
@@ -46,7 +46,7 @@ begin
 end;
 $$ language plpgsql;
 
-create or replace function p3(cusacc char, cusname char, cusprovince char) returns void as $$
+create or replace function p3(cusacc char, cusname char, cusprovince char, crlim float8) returns void as $$
 declare
         c_account char(10);
         c_cname char(10);
@@ -69,7 +69,7 @@ begin
                 raise notice ' ';
         end loop;
 
-        insert into customer values (cusacc, cusname, cusprovince, 0, 1000);
+        insert into customer values (cusacc, cusname, cusprovince, 0, crlim);
         select * from customer into c_account, c_cname, c_province, c_cbalance, c_crlimit
                 where account = cusacc;
         raise notice ' ';
