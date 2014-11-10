@@ -1,4 +1,4 @@
-create or replace function p3(cusname char, cusprovince char) returns void as $$
+create or replace function p3a(cusname char, cusprovince char) returns void as $$
 declare
 	c_account char(10);
 	n_account char(10);
@@ -45,3 +45,42 @@ begin
 	close c1;
 end;
 $$ language plpgsql;
+
+create or replace function p3(cusacc char, cusname char, cusprovince char) returns void as $$
+declare
+        c_account char(10);
+        c_cname char(10);
+        c_province char(10);
+        c_cbalance float8;
+        c_crlimit float8;
+	c1 cursor for select * from customer;
+
+begin
+        open c1;
+        loop
+                fetch c1 into c_account,
+                c_cname, c_province, c_cbalance, c_crlimit;
+                exit when not found;
+                raise notice 'Account: %', c_account;
+                raise notice 'Name: %', c_cname;
+                raise notice 'Province: %', c_province;
+                raise notice 'Balance: %', c_cbalance;
+                raise notice 'CrLimit: %', c_crlimit;
+                raise notice ' ';
+        end loop;
+
+        insert into customer values (cusacc, cusname, cusprovince, 0, 1000);
+        select * from customer into c_account, c_cname, c_province, c_cbalance, c_crlimit
+                where account = cusacc;
+        raise notice ' ';
+        raise notice '### New Account ###';
+        raise notice 'Account: %', c_account;
+        raise notice 'Name: %', c_cname;
+        raise notice 'Province: %', c_province;
+        raise notice 'Balance: %', c_cbalance;
+        raise notice 'CrLimit: %', c_crlimit;
+
+        close c1;
+end;
+$$ language plpgsql;
+
