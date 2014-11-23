@@ -1,0 +1,2633 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='UTF-8' />
+    <title>RuboCop Inspection Report</title>
+    
+    <style>
+    * {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    }
+
+    body, html {
+    font-size: 62.5%;
+    }
+    body {
+    background-color: #ecedf0;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    margin: 0;
+    }
+    code {
+    font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+    font-size: 85%;
+    }
+    #header {
+    background: #f9f9f9;
+    color: #333;
+    border-bottom: 3px solid #ccc;
+    height: 50px;
+    padding: 0;
+    }
+    #header .logo {
+    float: left;
+    margin: 5px 12px 7px 20px;
+    width: 38px;
+    height: 38px;
+    }
+    #header .title {
+    display: inline-block;
+    float: left;
+    height: 50px;
+    font-size: 2.4rem;
+    letter-spacing: normal;
+    line-height: 50px;
+    margin: 0;
+    }
+
+    .information, #offenses {
+    width: 100%;
+    padding: 20px;
+    color: #333;
+    }
+    #offenses {
+    padding: 0 20px;
+    }
+
+    .information .infobox {
+    border-left: 3px solid;
+    border-radius: 4px;
+    background-color: #fff;
+    -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+    padding: 15px;
+    border-color: #0088cc;
+    font-size: 1.4rem;
+    }
+    .information .infobox .info-title {
+    font-size: 1.8rem;
+    line-height: 2.2rem;
+    margin: 0 0 0.5em;
+    }
+    .information .infobox ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    }
+    .information .infobox ul li {
+    line-height: 1.8rem
+    }
+
+    #offenses .offense-box {
+    border-radius: 4px;
+    margin-bottom: 20px;
+    background-color: #fff;
+    -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+    }
+    #offenses .offense-box .box-title h3 {
+    color: #33353f;
+    background-color: #f6f6f6;
+    font-size: 2rem;
+    line-height: 2rem;
+    display: block;
+    padding: 15px;
+    border-radius: 5px;
+    margin: 0;
+    }
+    #offenses .offense-box .offense-reports  {
+    padding: 0 15px;
+    }
+    #offenses .offense-box .offense-reports .report {
+    border-bottom: 1px dotted #ddd;
+    padding: 15px 0px;
+    position: relative;
+    font-size: 1.3rem;
+    }
+    #offenses .offense-box .offense-reports .report:last-child {
+    border-bottom: none;
+    }
+    #offenses .offense-box .offense-reports .report pre code {
+    display: block;
+    background: #000;
+    color: #fff;
+    padding: 10px 15px;
+    border-radius: 5px;
+    line-height: 1.6rem;
+    }
+    #offenses .offense-box .offense-reports .report .location {
+    font-weight: bold;
+    }
+    #offenses .offense-box .offense-reports .report .message code {
+    padding: 0.3em;
+    background-color: rgba(0,0,0,0.07);
+    border-radius: 3px;
+    }
+    .severity {
+    text-transform: capitalize;
+    font-weight: bold;
+    }
+    .highlight {
+    padding: 2px;
+    border-radius: 2px;
+    font-weight: bold;
+    }
+
+    .severity.refactor {
+    color: rgba(237, 156, 40, 1.0);
+    }
+    .highlight.refactor {
+    background-color: rgba(237, 156, 40, 0.6);
+    border: 1px solid rgba(237, 156, 40, 0.4);
+    }
+
+    .severity.convention {
+    color: rgba(237, 156, 40, 1.0);
+    }
+    .highlight.convention {
+    background-color: rgba(237, 156, 40, 0.6);
+    border: 1px solid rgba(237, 156, 40, 0.4);
+    }
+
+    .severity.warning {
+    color: rgba(150, 40, 239, 1.0);
+    }
+    .highlight.warning {
+    background-color: rgba(150, 40, 239, 0.6);
+    border: 1px solid rgba(150, 40, 239, 0.4);
+    }
+
+    .severity.error {
+    color: rgba(210, 50, 45, 1.0);
+    }
+    .highlight.error {
+    background-color: rgba(210, 50, 45, 0.6);
+    border: 1px solid rgba(210, 50, 45, 0.4);
+    }
+
+    .severity.fatal {
+    color: rgba(210, 50, 45, 1.0);
+    }
+    .highlight.fatal {
+    background-color: rgba(210, 50, 45, 0.6);
+    border: 1px solid rgba(210, 50, 45, 0.4);
+    }
+
+    footer {
+    margin-bottom: 20px;
+    margin-right: 20px;
+    font-size: 1.3rem;
+    color: #777;
+    text-align: right;
+    }
+    </style>
+  </head>
+  <body>
+    <div id="header">
+      <img class="logo" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEwAAABMCAYAAADHl1ErAAAKQWlDQ1BJQ0Mg
+UHJvZmlsZQAASA2dlndUU9kWh8+9N73QEiIgJfQaegkg0jtIFQRRiUmAUAKG
+hCZ2RAVGFBEpVmRUwAFHhyJjRRQLg4Ji1wnyEFDGwVFEReXdjGsJ7601896a
+/cdZ39nnt9fZZ+9917oAUPyCBMJ0WAGANKFYFO7rwVwSE8vE9wIYEAEOWAHA
+4WZmBEf4RALU/L09mZmoSMaz9u4ugGS72yy/UCZz1v9/kSI3QyQGAApF1TY8
+fiYX5QKUU7PFGTL/BMr0lSkyhjEyFqEJoqwi48SvbPan5iu7yZiXJuShGlnO
+Gbw0noy7UN6aJeGjjAShXJgl4GejfAdlvVRJmgDl9yjT0/icTAAwFJlfzOcm
+oWyJMkUUGe6J8gIACJTEObxyDov5OWieAHimZ+SKBIlJYqYR15hp5ejIZvrx
+s1P5YjErlMNN4Yh4TM/0tAyOMBeAr2+WRQElWW2ZaJHtrRzt7VnW5mj5v9nf
+Hn5T/T3IevtV8Sbsz55BjJ5Z32zsrC+9FgD2JFqbHbO+lVUAtG0GQOXhrE/v
+IADyBQC03pzzHoZsXpLE4gwnC4vs7GxzAZ9rLivoN/ufgm/Kv4Y595nL7vtW
+O6YXP4EjSRUzZUXlpqemS0TMzAwOl89k/fcQ/+PAOWnNycMsnJ/AF/GF6FVR
+6JQJhIlou4U8gViQLmQKhH/V4X8YNicHGX6daxRodV8AfYU5ULhJB8hvPQBD
+IwMkbj96An3rWxAxCsi+vGitka9zjzJ6/uf6Hwtcim7hTEEiU+b2DI9kciWi
+LBmj34RswQISkAd0oAo0gS4wAixgDRyAM3AD3iAAhIBIEAOWAy5IAmlABLJB
+PtgACkEx2AF2g2pwANSBetAEToI2cAZcBFfADXALDIBHQAqGwUswAd6BaQiC
+8BAVokGqkBakD5lC1hAbWgh5Q0FQOBQDxUOJkBCSQPnQJqgYKoOqoUNQPfQj
+dBq6CF2D+qAH0CA0Bv0BfYQRmALTYQ3YALaA2bA7HAhHwsvgRHgVnAcXwNvh
+SrgWPg63whfhG/AALIVfwpMIQMgIA9FGWAgb8URCkFgkAREha5EipAKpRZqQ
+DqQbuY1IkXHkAwaHoWGYGBbGGeOHWYzhYlZh1mJKMNWYY5hWTBfmNmYQM4H5
+gqVi1bGmWCesP3YJNhGbjS3EVmCPYFuwl7ED2GHsOxwOx8AZ4hxwfrgYXDJu
+Na4Etw/XjLuA68MN4SbxeLwq3hTvgg/Bc/BifCG+Cn8cfx7fjx/GvyeQCVoE
+a4IPIZYgJGwkVBAaCOcI/YQRwjRRgahPdCKGEHnEXGIpsY7YQbxJHCZOkxRJ
+hiQXUiQpmbSBVElqIl0mPSa9IZPJOmRHchhZQF5PriSfIF8lD5I/UJQoJhRP
+ShxFQtlOOUq5QHlAeUOlUg2obtRYqpi6nVpPvUR9Sn0vR5Mzl/OX48mtk6uR
+a5Xrl3slT5TXl3eXXy6fJ18hf0r+pvy4AlHBQMFTgaOwVqFG4bTCPYVJRZqi
+lWKIYppiiWKD4jXFUSW8koGStxJPqUDpsNIlpSEaQtOledK4tE20Otpl2jAd
+Rzek+9OT6cX0H+i99AllJWVb5SjlHOUa5bPKUgbCMGD4M1IZpYyTjLuMj/M0
+5rnP48/bNq9pXv+8KZX5Km4qfJUilWaVAZWPqkxVb9UU1Z2qbapP1DBqJmph
+atlq+9Uuq43Pp893ns+dXzT/5PyH6rC6iXq4+mr1w+o96pMamhq+GhkaVRqX
+NMY1GZpumsma5ZrnNMe0aFoLtQRa5VrntV4wlZnuzFRmJbOLOaGtru2nLdE+
+pN2rPa1jqLNYZ6NOs84TXZIuWzdBt1y3U3dCT0svWC9fr1HvoT5Rn62fpL9H
+v1t/ysDQINpgi0GbwaihiqG/YZ5ho+FjI6qRq9Eqo1qjO8Y4Y7ZxivE+41sm
+sImdSZJJjclNU9jU3lRgus+0zwxr5mgmNKs1u8eisNxZWaxG1qA5wzzIfKN5
+m/krCz2LWIudFt0WXyztLFMt6ywfWSlZBVhttOqw+sPaxJprXWN9x4Zq42Oz
+zqbd5rWtqS3fdr/tfTuaXbDdFrtOu8/2DvYi+yb7MQc9h3iHvQ732HR2KLuE
+fdUR6+jhuM7xjOMHJ3snsdNJp9+dWc4pzg3OowsMF/AX1C0YctFx4bgccpEu
+ZC6MX3hwodRV25XjWuv6zE3Xjed2xG3E3dg92f24+ysPSw+RR4vHlKeT5xrP
+C16Il69XkVevt5L3Yu9q76c+Oj6JPo0+E752vqt9L/hh/QL9dvrd89fw5/rX
++08EOASsCegKpARGBFYHPgsyCRIFdQTDwQHBu4IfL9JfJFzUFgJC/EN2hTwJ
+NQxdFfpzGC4sNKwm7Hm4VXh+eHcELWJFREPEu0iPyNLIR4uNFksWd0bJR8VF
+1UdNRXtFl0VLl1gsWbPkRoxajCCmPRYfGxV7JHZyqffS3UuH4+ziCuPuLjNc
+lrPs2nK15anLz66QX8FZcSoeGx8d3xD/iRPCqeVMrvRfuXflBNeTu4f7kufG
+K+eN8V34ZfyRBJeEsoTRRJfEXYljSa5JFUnjAk9BteB1sl/ygeSplJCUoykz
+qdGpzWmEtPi000IlYYqwK10zPSe9L8M0ozBDuspp1e5VE6JA0ZFMKHNZZruY
+jv5M9UiMJJslg1kLs2qy3mdHZZ/KUcwR5vTkmuRuyx3J88n7fjVmNXd1Z752
+/ob8wTXuaw6thdauXNu5Tnddwbrh9b7rj20gbUjZ8MtGy41lG99uit7UUaBR
+sL5gaLPv5sZCuUJR4b0tzlsObMVsFWzt3WazrWrblyJe0fViy+KK4k8l3JLr
+31l9V/ndzPaE7b2l9qX7d+B2CHfc3em681iZYlle2dCu4F2t5czyovK3u1fs
+vlZhW3FgD2mPZI+0MqiyvUqvakfVp+qk6oEaj5rmvep7t+2d2sfb17/fbX/T
+AY0DxQc+HhQcvH/I91BrrUFtxWHc4azDz+ui6rq/Z39ff0TtSPGRz0eFR6XH
+wo911TvU1zeoN5Q2wo2SxrHjccdv/eD1Q3sTq+lQM6O5+AQ4ITnx4sf4H++e
+DDzZeYp9qukn/Z/2ttBailqh1tzWibakNml7THvf6YDTnR3OHS0/m/989Iz2
+mZqzymdLz5HOFZybOZ93fvJCxoXxi4kXhzpXdD66tOTSna6wrt7LgZevXvG5
+cqnbvfv8VZerZ645XTt9nX297Yb9jdYeu56WX+x+aem172296XCz/ZbjrY6+
+BX3n+l37L972un3ljv+dGwOLBvruLr57/17cPel93v3RB6kPXj/Mejj9aP1j
+7OOiJwpPKp6qP6391fjXZqm99Oyg12DPs4hnj4a4Qy//lfmvT8MFz6nPK0a0
+RupHrUfPjPmM3Xqx9MXwy4yX0+OFvyn+tveV0auffnf7vWdiycTwa9HrmT9K
+3qi+OfrW9m3nZOjk03dp76anit6rvj/2gf2h+2P0x5Hp7E/4T5WfjT93fAn8
+8ngmbWbm3/eE8/syOll+AAAACXBIWXMAAAsTAAALEwEAmpwYAAAEJGlUWHRY
+TUw6Y29tLmFkb2JlLnhtcAAAAAAAPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9i
+ZTpuczptZXRhLyIgeDp4bXB0az0iWE1QIENvcmUgNS40LjAiPgogICA8cmRm
+OlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjIt
+cmRmLXN5bnRheC1ucyMiPgogICAgICA8cmRmOkRlc2NyaXB0aW9uIHJkZjph
+Ym91dD0iIgogICAgICAgICAgICB4bWxuczp0aWZmPSJodHRwOi8vbnMuYWRv
+YmUuY29tL3RpZmYvMS4wLyIKICAgICAgICAgICAgeG1sbnM6ZXhpZj0iaHR0
+cDovL25zLmFkb2JlLmNvbS9leGlmLzEuMC8iCiAgICAgICAgICAgIHhtbG5z
+OmRjPSJodHRwOi8vcHVybC5vcmcvZGMvZWxlbWVudHMvMS4xLyIKICAgICAg
+ICAgICAgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAv
+Ij4KICAgICAgICAgPHRpZmY6UmVzb2x1dGlvblVuaXQ+MTwvdGlmZjpSZXNv
+bHV0aW9uVW5pdD4KICAgICAgICAgPHRpZmY6Q29tcHJlc3Npb24+NTwvdGlm
+ZjpDb21wcmVzc2lvbj4KICAgICAgICAgPHRpZmY6WFJlc29sdXRpb24+NzI8
+L3RpZmY6WFJlc29sdXRpb24+CiAgICAgICAgIDx0aWZmOk9yaWVudGF0aW9u
+PjE8L3RpZmY6T3JpZW50YXRpb24+CiAgICAgICAgIDx0aWZmOllSZXNvbHV0
+aW9uPjcyPC90aWZmOllSZXNvbHV0aW9uPgogICAgICAgICA8ZXhpZjpQaXhl
+bFhEaW1lbnNpb24+NzY8L2V4aWY6UGl4ZWxYRGltZW5zaW9uPgogICAgICAg
+ICA8ZXhpZjpDb2xvclNwYWNlPjE8L2V4aWY6Q29sb3JTcGFjZT4KICAgICAg
+ICAgPGV4aWY6UGl4ZWxZRGltZW5zaW9uPjc2PC9leGlmOlBpeGVsWURpbWVu
+c2lvbj4KICAgICAgICAgPGRjOnN1YmplY3Q+CiAgICAgICAgICAgIDxyZGY6
+U2VxLz4KICAgICAgICAgPC9kYzpzdWJqZWN0PgogICAgICAgICA8eG1wOk1v
+ZGlmeURhdGU+MjAxNDowOToyMyAyMjowOToxNDwveG1wOk1vZGlmeURhdGU+
+CiAgICAgICAgIDx4bXA6Q3JlYXRvclRvb2w+UGl4ZWxtYXRvciAzLjIuMTwv
+eG1wOkNyZWF0b3JUb29sPgogICAgICA8L3JkZjpEZXNjcmlwdGlvbj4KICAg
+PC9yZGY6UkRGPgo8L3g6eG1wbWV0YT4KkpvroQAABkNJREFUeAHtm0uIHFUY
+hWveM8ZpHN/RYCIS34mKGGSMMmLA6CKILmQwBOJCEcwqKzELceVWN+IyIgQM
+4gt84SMqBpNBkBiJGkEFMRFNMmSSzEzm5fmG7qEpbt1bt7q6XuOBQ3Xfuvf/
+z/nr3qrq6u6OIH9cLAlrxGvr20e0vVsE34rviL+Lv9W3J7XNDR05Zb5deR8U
+7xfXiVeKnaIN89p5XPxB/EL8WPxerCxqcrZd3CdOiwstkhj7RGISuzLol5On
+xSNiq0WKGk9scpCr1LhP6veLUUbTbicXOUuHHil+QZwS0y6KKx45yY2GUuAy
+qXxXdBlr9340oKXQWC11Y2K7ixE3PlrQVEhcI1WHxLhmsuqHJrQVCtx8cpOZ
+VRF886ANjYVAl1TsFX1NZN0fjWjNHTulIGvzSfOhNVfcpuwTYlIDWY9DK5pz
+AdP7EzFr063mQ3MuS/PREharUWy0Zwruog+IDQFl26I9008Cm0tcrMbBxYM3
+XM+gogI+GbWjRO2ZebhKRTklNo5UWbd4wIsXksywEWW4yCtLMTvjYcRXWpKC
+bfJNUuD+3l58C9Yt83cWuAC+0vCCp7aBT/3nxbKet8K68eL1JMO3unzLtFtk
+WwVQwKp4Kebx8KnurbLwjLhBHCimHW9VkxpxUHxVPOw92jJgi/bxjXP4HFCV
+93jDYypYrSj/iFUpTpQPPK4RrYhzW7FVES61RqnGTjw+4bISp2B3uIJUaL/T
+a5yC9VaoIC4rTq9xCjbrylKh/U6vroLdpGKsr1BBXFbwiudE4NP8j2LUVaWq
+7XiOfBpjm2HbNPBmcbkBz3g3wnanf1ojBo2j6o1DnZ3B6IpasL6nb/Hng0y5
+IgKT8+Khmelgz9nTwal53lnB13E1Uw9bwaz+r+jqCvZcsjIY7hsIZhdXrSl8
+sdq69Tl7//RkMHriWPD33JxLnLE2vk8rlpLsGBwKhvsHggn30Voak/+LhUXN
+aN81/m8iObZzWGRABg339QfTC9ZJGDk+zx1oRnsi4xKeaBxlmlJi45zNsxox
+cqMZ7UkPdeKCvX3uTNCrkpWpaGhFM9qTFizxOWy3rjZru3uD7RfWgoGOcpRt
+UjPrlYnxAO1JYXN6QEF5WGgFtxQ39vQGXbZI1gjZ7JzTlPpp5vzirUWMjGPq
+4/QejjOiBmbuciTevcH57TWRu7zlUjS84jnRuV3jFr+z+1Lb5VKwr+qe8W6E
+q5I87jhpHFnNxhOyZX3E4yoYZcnl13o5HQ+n1zgFS34Nzsl1C2mdXuMU7PMW
+BJRtaCpeecTDfUnVT/x4tD7O8jn616nz1xUuGt7w6ITP/Xmfoj0s8n/sFSIz
+Low4Szw8Jov33F+FgfezIn+r+UDkH77/I+0K+MywRm7+0P6hGF7vM2rbIh4V
+i4S1EvOeGP6ZOY+hHxKPi7GR5GkFYxDBsmwGS5RlWzSg6QYxPDlYjt7+vQfU
+q2G6G6bNdF6rD1naPKZXHNk0wEx/yxEITWgLzzCTB0eoBBV2RrR3eEC7Xxcv
+sHeLvXdUPcfFz2KPaLFjllc1foD7hphWsbBOLGISOxMkXZJJxLEMuWAALuEY
+PcebBKBQW0XOT8Qk9ndiIbFKqlgGnBuayS+SbxGj0KUdz4sUaUdUJ492YhCL
+mMSOAppMv/zGA17ajqQFawhj+YSvWI19PltixFmKqRYsyyXZKEZaS4fZnVas
+hjbnNo+ChUVtVMP1omvWUaCfxW/EUuFqqTX9m21W7es8nTyl/oxrPhfaXtOX
+MT5AkykHHvDSdgwpw1+iyRgfjeLiHnU8I5ri2NoYw9i4QJMpHh7w0nZw7zYm
+mkS8GTP7SvX7JSKGKW64jbHEiIO96hQez3s8ZHYf+nKECKb+NtEGzpvviyYT
+Pm3EcJ2D0WJajuTBQ2bYqEz8wMpkcErtu8TLxTC4X3pJNI1L0kYs0z0YudGA
+FlNctOPBG64rU1RARH4kborqoPZj4mGx8cUCuVaJG8Q0cVDB/hQpDKiJ/C/K
+tmQ/1f7NovNXdeqTGu5SJB6RmI5gkdvQjPZc8KyyFrk4Jm1ozhXPKTvPzE3i
+itSGRrQWAo9LxR9ikQrUrAVtaCwUOMm+KB4Vm8Xm+RotaLJdALQ7Xwwq/b3i
+TvFXMeuCkZPcaEBLqvgPBhCuiZo8+sAAAAAASUVORK5CYII=
+" alt="">
+      <h1 class="title">RuboCop Inspection Report</h1>
+    </div>
+    <div class="information">
+      <div class="infobox">
+        16 files inspected,
+        200 offenses detected
+      </div>
+    </div>
+    <div id="offenses">
+      
+      
+      <div class="offense-box">
+        <div class="box-title"><h3>controllers/application_controller.rb - 6 offenses</h3></div>
+        <div class="offense-reports">
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #1</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Missing top-level class documentation comment.</span>
+            </div>
+            
+            <pre><code><span class="highlight convention">class</span> ApplicationController < ActionController::Base</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #5</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Trailing whitespace detected.</span>
+            </div>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #8</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Extra blank line detected.</span>
+            </div>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #10</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Use a guard clause instead of wrapping the code inside a conditional expression.</span>
+            </div>
+            
+            <pre><code>    <span class="highlight convention">if</span> request.xhr?</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #11</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Line is too long. [91/80]</span>
+            </div>
+            
+            <pre><code>      # Also modify 'flash' to other attributes which you use in your common/fla<span class="highlight convention">shes for js</span></code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #14</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Trailing whitespace detected.</span>
+            </div>
+            
+            <pre><code>  end<span class="highlight convention"> </span></code></pre>
+            
+          </div>
+          
+        </div>
+      </div>
+      
+      
+      
+      <div class="offense-box">
+        <div class="box-title"><h3>controllers/city_controller.rb - 31 offenses</h3></div>
+        <div class="offense-reports">
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #1</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Missing top-level class documentation comment.</span>
+            </div>
+            
+            <pre><code><span class="highlight convention">class</span> CityController < ApplicationController</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #4</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Assignment Branch Condition size for update is too high. [19.13/15]</span>
+            </div>
+            
+            <pre><code>  <span class="highlight convention">def</span> update</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #9</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Favor modifier <code>if</code> usage when having a single-line body. Another good alternative is the usage of control flow <code>&&</code>/<code>||</code>.</span>
+            </div>
+            
+            <pre><code>      <span class="highlight convention">if</span> city.save</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #13</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Prefer single-quoted strings when you don't need string interpolation or special symbols.</span>
+            </div>
+            
+            <pre><code>      render json: { error: <span class="highlight convention">"No city with that name "</span> + params[:city_name] }</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #17</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Assignment Branch Condition size for isp_list is too high. [21.38/15]</span>
+            </div>
+            
+            <pre><code>  <span class="highlight convention">def</span> isp_list</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #17</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Method has too many lines. [13/10]</span>
+            </div>
+            
+            <pre><code>  <span class="highlight convention">def</span> isp_list</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #19</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Use snake_case for variable names.</span>
+            </div>
+            
+            <pre><code>    <span class="highlight convention">oldestDate</span> = Time.now - 1.year</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #21</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Prefer single-quoted strings when you don't need string interpolation or special symbols.</span>
+            </div>
+            
+            <pre><code>    top_isps = city.speed_test_results.select(<span class="highlight convention">"isp_company_id, AVG(download_kbps) as avg_download"</span>).</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #21</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Line is too long. [100/80]</span>
+            </div>
+            
+            <pre><code>    top_isps = city.speed_test_results.select("isp_company_id, AVG(download_kbps<span class="highlight convention">) as avg_download").</span></code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #21</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Place the . on the next line, together with the method name.</span>
+            </div>
+            
+            <pre><code>    top_isps = city.speed_test_results.select("isp_company_id, AVG(download_kbps) as avg_download")<span class="highlight convention">.</span></code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #22</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Align the operands of an expression in an assignment spanning multiple lines.</span>
+            </div>
+            
+            <pre><code>      <span class="highlight convention">where</span>("date > \"#{oldestDate}\"").</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #22</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Place the . on the next line, together with the method name.</span>
+            </div>
+            
+            <pre><code>      where("date > \"#{oldestDate}\"")<span class="highlight convention">.</span></code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #23</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Align the operands of an expression in an assignment spanning multiple lines.</span>
+            </div>
+            
+            <pre><code>      <span class="highlight convention">group</span>("isp_company_id").</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #23</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Prefer single-quoted strings when you don't need string interpolation or special symbols.</span>
+            </div>
+            
+            <pre><code>      group(<span class="highlight convention">"isp_company_id"</span>).</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #23</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Place the . on the next line, together with the method name.</span>
+            </div>
+            
+            <pre><code>      group("isp_company_id")<span class="highlight convention">.</span></code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #24</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Align the operands of an expression in an assignment spanning multiple lines.</span>
+            </div>
+            
+            <pre><code>      <span class="highlight convention">order</span>("avg_download DESC").</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #24</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Prefer single-quoted strings when you don't need string interpolation or special symbols.</span>
+            </div>
+            
+            <pre><code>      order(<span class="highlight convention">"avg_download DESC"</span>).</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #24</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Place the . on the next line, together with the method name.</span>
+            </div>
+            
+            <pre><code>      order("avg_download DESC")<span class="highlight convention">.</span></code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #25</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Align the operands of an expression in an assignment spanning multiple lines.</span>
+            </div>
+            
+            <pre><code>      <span class="highlight convention">limit</span>(10).</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #25</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Place the . on the next line, together with the method name.</span>
+            </div>
+            
+            <pre><code>      limit(10)<span class="highlight convention">.</span></code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #26</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Align the operands of an expression in an assignment spanning multiple lines.</span>
+            </div>
+            
+            <pre><code>      <span class="highlight convention">map</span>(&:isp_company_id)</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #27</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Trailing whitespace detected.</span>
+            </div>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #28</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Prefer single-quoted strings when you don't need string interpolation or special symbols.</span>
+            </div>
+            
+            <pre><code>    isps = city.speed_test_results.select(<span class="highlight convention">"isp_company_id, isp_companies.name, date, AVG(download_kbps) as avg_download"</span>).</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #28</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Line is too long. [122/80]</span>
+            </div>
+            
+            <pre><code>    isps = city.speed_test_results.select("isp_company_id, isp_companies.name, d<span class="highlight convention">ate, AVG(download_kbps) as avg_download").</span></code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #28</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Place the . on the next line, together with the method name.</span>
+            </div>
+            
+            <pre><code>    isps = city.speed_test_results.select("isp_company_id, isp_companies.name, date, AVG(download_kbps) as avg_download")<span class="highlight convention">.</span></code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #29</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Align the operands of an expression in an assignment spanning multiple lines.</span>
+            </div>
+            
+            <pre><code>      <span class="highlight convention">joins</span>(:isp_company).</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #29</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Place the . on the next line, together with the method name.</span>
+            </div>
+            
+            <pre><code>      joins(:isp_company)<span class="highlight convention">.</span></code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #30</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Align the operands of an expression in an assignment spanning multiple lines.</span>
+            </div>
+            
+            <pre><code>      <span class="highlight convention">where</span>("date > \"#{oldestDate}\"").where(isp_company_id: top_isps).</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #30</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Place the . on the next line, together with the method name.</span>
+            </div>
+            
+            <pre><code>      where("date > \"#{oldestDate}\"").where(isp_company_id: top_isps)<span class="highlight convention">.</span></code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #31</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Align the operands of an expression in an assignment spanning multiple lines.</span>
+            </div>
+            
+            <pre><code>      <span class="highlight convention">group</span>("isp_company_id, YEAR(date), MONTH(date)").to_json</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #31</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Prefer single-quoted strings when you don't need string interpolation or special symbols.</span>
+            </div>
+            
+            <pre><code>      group(<span class="highlight convention">"isp_company_id, YEAR(date), MONTH(date)"</span>).to_json</code></pre>
+            
+          </div>
+          
+        </div>
+      </div>
+      
+      
+      
+      <div class="offense-box">
+        <div class="box-title"><h3>controllers/conversations_controller.rb - 23 offenses</h3></div>
+        <div class="offense-reports">
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #1</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Missing top-level class documentation comment.</span>
+            </div>
+            
+            <pre><code><span class="highlight convention">class</span> ConversationsController < ApplicationController</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #3</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Trailing whitespace detected.</span>
+            </div>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #4</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Trailing whitespace detected.</span>
+            </div>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #19</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Use snake_case for variable names.</span>
+            </div>
+            
+            <pre><code>    <span class="highlight convention">@Conversations</span> = Conversation.order("created_at DESC")</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #19</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Prefer single-quoted strings when you don't need string interpolation or special symbols.</span>
+            </div>
+            
+            <pre><code>    @Conversations = Conversation.order(<span class="highlight convention">"created_at DESC"</span>)</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #21</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Prefer single-quoted strings when you don't need string interpolation or special symbols.</span>
+            </div>
+            
+            <pre><code>      flash[:success] = <span class="highlight convention">"Thank you for joining the conversation!"</span></code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #23</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Prefer single-quoted strings when you don't need string interpolation or special symbols.</span>
+            </div>
+            
+            <pre><code>      flash[:error] = <span class="highlight convention">"There was an error with your submission, please try again."</span></code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #23</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Line is too long. [82/80]</span>
+            </div>
+            
+            <pre><code>      flash[:error] = "There was an error with your submission, please try again<span class="highlight convention">."</span></code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #27</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Assignment Branch Condition size for update is too high. [28.71/15]</span>
+            </div>
+            
+            <pre><code>  <span class="highlight convention">def</span> update</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #27</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Cyclomatic complexity for update is too high. [7/6]</span>
+            </div>
+            
+            <pre><code>  <span class="highlight convention">def</span> update</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #27</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Method has too many lines. [11/10]</span>
+            </div>
+            
+            <pre><code>  <span class="highlight convention">def</span> update</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #28</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Use snake_case for variable names.</span>
+            </div>
+            
+            <pre><code>    <span class="highlight convention">@AllConversations</span> = Conversation.order("created_at DESC")</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #28</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Prefer single-quoted strings when you don't need string interpolation or special symbols.</span>
+            </div>
+            
+            <pre><code>    @AllConversations = Conversation.order(<span class="highlight convention">"created_at DESC"</span>)</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #29</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Use snake_case for variable names.</span>
+            </div>
+            
+            <pre><code>    <span class="highlight convention">@Conversations</span> = Array.new</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #29</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Use array literal <code>[]</code> instead of <code>Array.new</code>.</span>
+            </div>
+            
+            <pre><code>    @Conversations = <span class="highlight convention">Array.new</span></code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #30</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Use <code>next</code> to skip iteration.</span>
+            </div>
+            
+            <pre><code>    @AllConversations.<span class="highlight convention">each</span> do |conversation|</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #31</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Use <code>||</code> instead of <code>or</code>.</span>
+            </div>
+            
+            <pre><code>      if params[:province_id].empty? <span class="highlight convention">or</span> params[:province_id].to_i == conversation.province_id</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #31</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Line is too long. [93/80]</span>
+            </div>
+            
+            <pre><code>      if params[:province_id].empty? or params[:province_id].to_i == conversatio<span class="highlight convention">n.province_id</span></code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #32</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Use <code>||</code> instead of <code>or</code>.</span>
+            </div>
+            
+            <pre><code>        if params[:city_id].empty? <span class="highlight convention">or</span> params[:city_id].to_i == conversation.city_id</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #32</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Line is too long. [83/80]</span>
+            </div>
+            
+            <pre><code>        if params[:city_id].empty? or params[:city_id].to_i == conversation.city<span class="highlight convention">_id</span></code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #33</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Use <code>||</code> instead of <code>or</code>.</span>
+            </div>
+            
+            <pre><code>          if params[:isp_company_id].empty? <span class="highlight convention">or</span> params[:isp_company_id].to_i == conversation.isp_company_id</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #33</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Line is too long. [106/80]</span>
+            </div>
+            
+            <pre><code>          if params[:isp_company_id].empty? or params[:isp_company_id].to_i == c<span class="highlight convention">onversation.isp_company_id</span></code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #41</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Indent access modifiers like <code>private</code>.</span>
+            </div>
+            
+            <pre><code><span class="highlight convention">private</span></code></pre>
+            
+          </div>
+          
+        </div>
+      </div>
+      
+      
+      
+      <div class="offense-box">
+        <div class="box-title"><h3>controllers/presenter_controller.rb - 13 offenses</h3></div>
+        <div class="offense-reports">
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #1</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Missing top-level class documentation comment.</span>
+            </div>
+            
+            <pre><code><span class="highlight convention">class</span> PresenterController < ApplicationController</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #2</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Extra empty line detected at class body beginning.</span>
+            </div>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #9</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Trailing whitespace detected.</span>
+            </div>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #12</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Tab detected.</span>
+            </div>
+            
+            <pre><code>  <span class="highlight convention">	</span>@Conversations = Conversation.order("created_at DESC")</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #12</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Inconsistent indentation detected.</span>
+            </div>
+            
+            <pre><code>  	<span class="highlight convention">@Conversations = Conversation.order("created_at DESC")</span></code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #12</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Use snake_case for variable names.</span>
+            </div>
+            
+            <pre><code>  	<span class="highlight convention">@Conversations</span> = Conversation.order("created_at DESC")</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #12</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Prefer single-quoted strings when you don't need string interpolation or special symbols.</span>
+            </div>
+            
+            <pre><code>  	@Conversations = Conversation.order(<span class="highlight convention">"created_at DESC"</span>)</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #15</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Assignment Branch Condition size for filter_location is too high. [33.62/15]</span>
+            </div>
+            
+            <pre><code>  <span class="highlight convention">def</span> filter_location</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #15</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Method has too many lines. [17/10]</span>
+            </div>
+            
+            <pre><code>  <span class="highlight convention">def</span> filter_location</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #15</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Perceived complexity for filter_location is too high. [8/7]</span>
+            </div>
+            
+            <pre><code>  <span class="highlight convention">def</span> filter_location</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #17</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Line is too long. [138/80]</span>
+            </div>
+            
+            <pre><code>    @isp_company_selected = IspCompany.find(params[:isp_company_id]) unless para<span class="highlight convention">ms[:isp_company_id].nil? || params[:isp_company_id].empty?</span></code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #26</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Use a guard clause instead of wrapping the code inside a conditional expression.</span>
+            </div>
+            
+            <pre><code>    <span class="highlight convention">if</span> !params[:city_id].empty?</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #26</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Favor <code>unless</code> over <code>if</code> for negative conditions.</span>
+            </div>
+            
+            <pre><code>    <span class="highlight convention">if !params[:city_id].empty?</span></code></pre>
+            
+          </div>
+          
+        </div>
+      </div>
+      
+      
+      
+      <div class="offense-box">
+        <div class="box-title"><h3>controllers/ranking_controller.rb - 17 offenses</h3></div>
+        <div class="offense-reports">
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #1</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Missing top-level class documentation comment.</span>
+            </div>
+            
+            <pre><code><span class="highlight convention">class</span> RankingController < ApplicationController</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #3</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Trailing whitespace detected.</span>
+            </div>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #5</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Prefer single-quoted strings when you don't need string interpolation or special symbols.</span>
+            </div>
+            
+            <pre><code>    name = params[<span class="highlight convention">"city"</span>].nil? ? "Guelph" : params["city"]</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #5</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Prefer single-quoted strings when you don't need string interpolation or special symbols.</span>
+            </div>
+            
+            <pre><code>    name = params["city"].nil? ? <span class="highlight convention">"Guelph"</span> : params["city"]</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #5</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Prefer single-quoted strings when you don't need string interpolation or special symbols.</span>
+            </div>
+            
+            <pre><code>    name = params["city"].nil? ? "Guelph" : params[<span class="highlight convention">"city"</span>]</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #7</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Trailing whitespace detected.</span>
+            </div>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #13</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Prefer single-quoted strings when you don't need string interpolation or special symbols.</span>
+            </div>
+            
+            <pre><code>    @ranking_list_name = <span class="highlight convention">"Top ISPs in your City"</span></code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #15</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Trailing whitespace detected.</span>
+            </div>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #17</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Prefer single-quoted strings when you don't need string interpolation or special symbols.</span>
+            </div>
+            
+            <pre><code>    name = params[<span class="highlight convention">"country"</span>].nil? ? "Canada" : params["country"]</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #17</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Prefer single-quoted strings when you don't need string interpolation or special symbols.</span>
+            </div>
+            
+            <pre><code>    name = params["country"].nil? ? <span class="highlight convention">"Canada"</span> : params["country"]</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #17</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Prefer single-quoted strings when you don't need string interpolation or special symbols.</span>
+            </div>
+            
+            <pre><code>    name = params["country"].nil? ? "Canada" : params[<span class="highlight convention">"country"</span>]</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #21</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Prefer single-quoted strings when you don't need string interpolation or special symbols.</span>
+            </div>
+            
+            <pre><code>    @ranking_list_name = <span class="highlight convention">"Top ISPs in Canada"</span></code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #25</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Prefer single-quoted strings when you don't need string interpolation or special symbols.</span>
+            </div>
+            
+            <pre><code>    cities = City.select(<span class="highlight convention">"name, rank, longitude, latitude, AVG(speed_test_results.download_kbps) as avg_download"</span>).joins(:speed_test_results).group("cities.id").to_json</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #25</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Line is too long. [168/80]</span>
+            </div>
+            
+            <pre><code>    cities = City.select("name, rank, longitude, latitude, AVG(speed_test_result<span class="highlight convention">s.download_kbps) as avg_download").joins(:speed_test_results).group("cities.id").to_json</span></code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #25</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Prefer single-quoted strings when you don't need string interpolation or special symbols.</span>
+            </div>
+            
+            <pre><code>    cities = City.select("name, rank, longitude, latitude, AVG(speed_test_results.download_kbps) as avg_download").joins(:speed_test_results).group(<span class="highlight convention">"cities.id"</span>).to_json</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #28</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Extra empty line detected at class body end.</span>
+            </div>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #29</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Final newline missing.</span>
+            </div>
+            
+            <pre><code>end<span class="highlight convention"></span></code></pre>
+            
+          </div>
+          
+        </div>
+      </div>
+      
+      
+      
+      <div class="offense-box">
+        <div class="box-title"><h3>controllers/recommendations_controller.rb - 30 offenses</h3></div>
+        <div class="offense-reports">
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #1</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Missing top-level class documentation comment.</span>
+            </div>
+            
+            <pre><code><span class="highlight convention">class</span> RecommendationsController < ApplicationController</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #3</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Trailing whitespace detected.</span>
+            </div>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #4</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Assignment Branch Condition size for recommend is too high. [39.67/15]</span>
+            </div>
+            
+            <pre><code>  <span class="highlight convention">def</span> recommend</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #4</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Method has too many lines. [16/10]</span>
+            </div>
+            
+            <pre><code>  <span class="highlight convention">def</span> recommend</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #11</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Prefer single-quoted strings when you don't need string interpolation or special symbols.</span>
+            </div>
+            
+            <pre><code>    isps = isps.select(<span class="highlight convention">"isps.*, MIN(isps.cable_price) AS cable_price, AVG(speed_test_results.download_kbps) AS avg_download, AVG(speed_test_results.upload_kbps) AS avg_upload, AVG(speed_test_results.download_kbps)/MIN(isps.cable_price) AS download_per_dollar"</span>).</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #11</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Line is too long. [261/80]</span>
+            </div>
+            
+            <pre><code>    isps = isps.select("isps.*, MIN(isps.cable_price) AS cable_price, AVG(speed_<span class="highlight convention">test_results.download_kbps) AS avg_download, AVG(speed_test_results.upload_kbps) AS avg_upload, AVG(speed_test_results.download_kbps)/MIN(isps.cable_price) AS download_per_dollar").</span></code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #11</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Place the . on the next line, together with the method name.</span>
+            </div>
+            
+            <pre><code>    isps = isps.select("isps.*, MIN(isps.cable_price) AS cable_price, AVG(speed_test_results.download_kbps) AS avg_download, AVG(speed_test_results.upload_kbps) AS avg_upload, AVG(speed_test_results.download_kbps)/MIN(isps.cable_price) AS download_per_dollar")<span class="highlight convention">.</span></code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #12</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Align the operands of an expression in an assignment spanning multiple lines.</span>
+            </div>
+            
+            <pre><code>                <span class="highlight convention">joins</span>("JOIN speed_test_results ON isps.isp_company_id = speed_test_results.isp_company_id AND isps.city_id = speed_test_results.city_id").</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #12</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Prefer single-quoted strings when you don't need string interpolation or special symbols.</span>
+            </div>
+            
+            <pre><code>                joins(<span class="highlight convention">"JOIN speed_test_results ON isps.isp_company_id = speed_test_results.isp_company_id AND isps.city_id = speed_test_results.city_id"</span>).</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #12</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Line is too long. [154/80]</span>
+            </div>
+            
+            <pre><code>                joins("JOIN speed_test_results ON isps.isp_company_id = speed_te<span class="highlight convention">st_results.isp_company_id AND isps.city_id = speed_test_results.city_id").</span></code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #12</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Place the . on the next line, together with the method name.</span>
+            </div>
+            
+            <pre><code>                joins("JOIN speed_test_results ON isps.isp_company_id = speed_test_results.isp_company_id AND isps.city_id = speed_test_results.city_id")<span class="highlight convention">.</span></code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #13</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Align the operands of an expression in an assignment spanning multiple lines.</span>
+            </div>
+            
+            <pre><code>                <span class="highlight convention">where</span>("isps.cable_price > 0").</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #13</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Prefer single-quoted strings when you don't need string interpolation or special symbols.</span>
+            </div>
+            
+            <pre><code>                where(<span class="highlight convention">"isps.cable_price > 0"</span>).</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #13</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Place the . on the next line, together with the method name.</span>
+            </div>
+            
+            <pre><code>                where("isps.cable_price > 0")<span class="highlight convention">.</span></code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #14</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Align the operands of an expression in an assignment spanning multiple lines.</span>
+            </div>
+            
+            <pre><code>                <span class="highlight convention">group</span>(:isp_company_id).</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #14</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Place the . on the next line, together with the method name.</span>
+            </div>
+            
+            <pre><code>                group(:isp_company_id)<span class="highlight convention">.</span></code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #15</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Align the operands of an expression in an assignment spanning multiple lines.</span>
+            </div>
+            
+            <pre><code>                <span class="highlight convention">order</span>("download_per_dollar DESC").</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #15</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Prefer single-quoted strings when you don't need string interpolation or special symbols.</span>
+            </div>
+            
+            <pre><code>                order(<span class="highlight convention">"download_per_dollar DESC"</span>).</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #15</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Place the . on the next line, together with the method name.</span>
+            </div>
+            
+            <pre><code>                order("download_per_dollar DESC")<span class="highlight convention">.</span></code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #16</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Align the operands of an expression in an assignment spanning multiple lines.</span>
+            </div>
+            
+            <pre><code>                <span class="highlight convention">joins</span>(:isp_company)</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #21</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Trailing whitespace detected.</span>
+            </div>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #22</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Space missing to the left of {.</span>
+            </div>
+            
+            <pre><code>    isps = isps.find_all<span class="highlight convention">{</span> |isp| isp.avg_download / 1000 > min_download.to_f } unless min_download.empty?</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #22</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Line is too long. [104/80]</span>
+            </div>
+            
+            <pre><code>    isps = isps.find_all{ |isp| isp.avg_download / 1000 > min_download.to_f } un<span class="highlight convention">less min_download.empty?</span></code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #23</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Space missing to the left of {.</span>
+            </div>
+            
+            <pre><code>    isps = isps.find_all<span class="highlight convention">{</span> |isp| isp.avg_upload / 1000 > min_upload.to_f } unless min_upload.empty?</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #23</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Line is too long. [98/80]</span>
+            </div>
+            
+            <pre><code>    isps = isps.find_all{ |isp| isp.avg_upload / 1000 > min_upload.to_f } unless<span class="highlight convention"> min_upload.empty?</span></code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #24</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Space missing to the left of {.</span>
+            </div>
+            
+            <pre><code>    isps = isps.find_all<span class="highlight convention">{</span> |isp| isp.cable_price <= max_cost.to_f } unless max_cost.empty?</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #24</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Line is too long. [89/80]</span>
+            </div>
+            
+            <pre><code>    isps = isps.find_all{ |isp| isp.cable_price <= max_cost.to_f } unless max_co<span class="highlight convention">st.empty?</span></code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #26</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Line is too long. [110/80]</span>
+            </div>
+            
+            <pre><code>    # valid_isps.sort_by{ |isp| isp.avg_download_kbps.nil? ? -1 : isp.avg_downlo<span class="highlight convention">ad_kbps/isp.cable_price }.last</span></code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #28</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Extra empty line detected at class body end.</span>
+            </div>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #29</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Final newline missing.</span>
+            </div>
+            
+            <pre><code>end<span class="highlight convention"></span></code></pre>
+            
+          </div>
+          
+        </div>
+      </div>
+      
+      
+      
+      <div class="offense-box">
+        <div class="box-title"><h3>helpers/application_helper.rb - 8 offenses</h3></div>
+        <div class="offense-reports">
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #1</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Missing top-level module documentation comment.</span>
+            </div>
+            
+            <pre><code><span class="highlight convention">module</span> ApplicationHelper</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #2</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Use 2 (not 4) spaces for indentation.</span>
+            </div>
+            
+            <pre><code><span class="highlight convention">    </span>def active_path(page)</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #3</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Use 2 (not 4) spaces for indentation.</span>
+            </div>
+            
+            <pre><code>    <span class="highlight convention">    </span>if(current_page?(page))</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #3</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Use space after control keywords.</span>
+            </div>
+            
+            <pre><code>        <span class="highlight convention">if</span>(current_page?(page))</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #4</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Use 2 (not 4) spaces for indentation.</span>
+            </div>
+            
+            <pre><code>        <span class="highlight convention">    </span>return "class=active"</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #4</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Prefer single-quoted strings when you don't need string interpolation or special symbols.</span>
+            </div>
+            
+            <pre><code>            return <span class="highlight convention">"class=active"</span></code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #6</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Use 2 (not 4) spaces for indentation.</span>
+            </div>
+            
+            <pre><code>        <span class="highlight convention">    </span>return ""</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #6</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Prefer single-quoted strings when you don't need string interpolation or special symbols.</span>
+            </div>
+            
+            <pre><code>            return <span class="highlight convention">""</span></code></pre>
+            
+          </div>
+          
+        </div>
+      </div>
+      
+      
+      
+      <div class="offense-box">
+        <div class="box-title"><h3>helpers/city_helper.rb - 1 offense</h3></div>
+        <div class="offense-reports">
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #1</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Missing top-level module documentation comment.</span>
+            </div>
+            
+            <pre><code><span class="highlight convention">module</span> CityHelper</code></pre>
+            
+          </div>
+          
+        </div>
+      </div>
+      
+      
+      
+      <div class="offense-box">
+        <div class="box-title"><h3>models/city.rb - 20 offenses</h3></div>
+        <div class="offense-reports">
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #1</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Missing top-level class documentation comment.</span>
+            </div>
+            
+            <pre><code><span class="highlight convention">class</span> City < ActiveRecord::Base</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #10</span> –
+              <span class="severity warning">warning:</span>
+              <span class="message">Unused method argument - <code>max_results</code>. If it's necessary, use <code>_</code> or <code>_max_results</code> as an argument name to indicate that it won't be used. You can also write as <code>isp_ranked_list(*)</code> if you want the method to accept any arguments but don't care about them.</span>
+            </div>
+            
+            <pre><code>  def isp_ranked_list(<span class="highlight warning">max_results</span>=100)</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #10</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Surrounding space missing in default value assignment.</span>
+            </div>
+            
+            <pre><code>  def isp_ranked_list(max_results<span class="highlight convention">=</span>100)</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #11</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Redundant <code>self</code> detected.</span>
+            </div>
+            
+            <pre><code>    <span class="highlight convention">self.isps</span>.select("*, AVG(speed_test_results.download_kbps) as avg_download, AVG(speed_test_results.download_kbps) / isps.cable_price as download_per_dollar").</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #11</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Prefer single-quoted strings when you don't need string interpolation or special symbols.</span>
+            </div>
+            
+            <pre><code>    self.isps.select(<span class="highlight convention">"*, AVG(speed_test_results.download_kbps) as avg_download, AVG(speed_test_results.download_kbps) / isps.cable_price as download_per_dollar"</span>).</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #11</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Line is too long. [162/80]</span>
+            </div>
+            
+            <pre><code>    self.isps.select("*, AVG(speed_test_results.download_kbps) as avg_download, <span class="highlight convention">AVG(speed_test_results.download_kbps) / isps.cable_price as download_per_dollar").</span></code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #11</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Place the . on the next line, together with the method name.</span>
+            </div>
+            
+            <pre><code>    self.isps.select("*, AVG(speed_test_results.download_kbps) as avg_download, AVG(speed_test_results.download_kbps) / isps.cable_price as download_per_dollar")<span class="highlight convention">.</span></code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #12</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Prefer single-quoted strings when you don't need string interpolation or special symbols.</span>
+            </div>
+            
+            <pre><code>      where(<span class="highlight convention">"cable_price > 0"</span>).</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #12</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Place the . on the next line, together with the method name.</span>
+            </div>
+            
+            <pre><code>      where("cable_price > 0")<span class="highlight convention">.</span></code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #13</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Prefer single-quoted strings when you don't need string interpolation or special symbols.</span>
+            </div>
+            
+            <pre><code>      joins(<span class="highlight convention">"JOIN speed_test_results ON isps.city_id = speed_test_results.city_id and isps.isp_company_id = speed_test_results.isp_company_id"</span>).</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #13</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Line is too long. [144/80]</span>
+            </div>
+            
+            <pre><code>      joins("JOIN speed_test_results ON isps.city_id = speed_test_results.city_i<span class="highlight convention">d and isps.isp_company_id = speed_test_results.isp_company_id").</span></code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #13</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Place the . on the next line, together with the method name.</span>
+            </div>
+            
+            <pre><code>      joins("JOIN speed_test_results ON isps.city_id = speed_test_results.city_id and isps.isp_company_id = speed_test_results.isp_company_id")<span class="highlight convention">.</span></code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #14</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Prefer single-quoted strings when you don't need string interpolation or special symbols.</span>
+            </div>
+            
+            <pre><code>      group(<span class="highlight convention">"isps.city_id, isps.isp_company_id"</span>).</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #14</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Place the . on the next line, together with the method name.</span>
+            </div>
+            
+            <pre><code>      group("isps.city_id, isps.isp_company_id")<span class="highlight convention">.</span></code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #15</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Prefer single-quoted strings when you don't need string interpolation or special symbols.</span>
+            </div>
+            
+            <pre><code>      having(<span class="highlight convention">"avg_download > 0"</span>).</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #15</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Place the . on the next line, together with the method name.</span>
+            </div>
+            
+            <pre><code>      having("avg_download > 0")<span class="highlight convention">.</span></code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #16</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Prefer single-quoted strings when you don't need string interpolation or special symbols.</span>
+            </div>
+            
+            <pre><code>      order(<span class="highlight convention">"download_per_dollar DESC"</span>)</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #18</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Line is too long. [113/80]</span>
+            </div>
+            
+            <pre><code>    # valid_isps.sort_by{ |isp| isp.avg_download_kbps.nil? ? -1 : isp.avg_downlo<span class="highlight convention">ad_kbps/isp.cable_price }.reverse</span></code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #23</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Redundant <code>self</code> detected.</span>
+            </div>
+            
+            <pre><code>    <span class="highlight convention">self.speed_test_results</span>.average(:download_kbps)</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #25</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Extra empty line detected at class body end.</span>
+            </div>
+            
+          </div>
+          
+        </div>
+      </div>
+      
+      
+      
+      <div class="offense-box">
+        <div class="box-title"><h3>models/conversation.rb - 13 offenses</h3></div>
+        <div class="offense-reports">
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #1</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Missing top-level class documentation comment.</span>
+            </div>
+            
+            <pre><code><span class="highlight convention">class</span> Conversation < ActiveRecord::Base</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #7</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Use 2 (not 1) spaces for indentation.</span>
+            </div>
+            
+            <pre><code>  <span class="highlight convention">	</span>self.created_at.strftime("%d/%m/%Y %I:%M%p")</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #7</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Tab detected.</span>
+            </div>
+            
+            <pre><code>  <span class="highlight convention">	</span>self.created_at.strftime("%d/%m/%Y %I:%M%p")</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #7</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Redundant <code>self</code> detected.</span>
+            </div>
+            
+            <pre><code>  	<span class="highlight convention">self.created_at</span>.strftime("%d/%m/%Y %I:%M%p")</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #7</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Prefer single-quoted strings when you don't need string interpolation or special symbols.</span>
+            </div>
+            
+            <pre><code>  	self.created_at.strftime(<span class="highlight convention">"%d/%m/%Y %I:%M%p"</span>)</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #11</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Use 2 (not 1) spaces for indentation.</span>
+            </div>
+            
+            <pre><code>  <span class="highlight convention">	</span>self.province.name + " / " + self.city.name + " / " + self.isp_company.name</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #11</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Tab detected.</span>
+            </div>
+            
+            <pre><code>  <span class="highlight convention">	</span>self.province.name + " / " + self.city.name + " / " + self.isp_company.name</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #11</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Redundant <code>self</code> detected.</span>
+            </div>
+            
+            <pre><code>  	<span class="highlight convention">self.province</span>.name + " / " + self.city.name + " / " + self.isp_company.name</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #11</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Prefer single-quoted strings when you don't need string interpolation or special symbols.</span>
+            </div>
+            
+            <pre><code>  	self.province.name + <span class="highlight convention">" / "</span> + self.city.name + " / " + self.isp_company.name</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #11</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Redundant <code>self</code> detected.</span>
+            </div>
+            
+            <pre><code>  	self.province.name + " / " + <span class="highlight convention">self.city</span>.name + " / " + self.isp_company.name</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #11</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Prefer single-quoted strings when you don't need string interpolation or special symbols.</span>
+            </div>
+            
+            <pre><code>  	self.province.name + " / " + self.city.name + <span class="highlight convention">" / "</span> + self.isp_company.name</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #11</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Redundant <code>self</code> detected.</span>
+            </div>
+            
+            <pre><code>  	self.province.name + " / " + self.city.name + " / " + <span class="highlight convention">self.isp_company</span>.name</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #14</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Line is too long. [87/80]</span>
+            </div>
+            
+            <pre><code>  validates :user_name, :province, :city, :isp_company, :subject, :body, presenc<span class="highlight convention">e: true</span></code></pre>
+            
+          </div>
+          
+        </div>
+      </div>
+      
+      
+      
+      <div class="offense-box">
+        <div class="box-title"><h3>models/country.rb - 20 offenses</h3></div>
+        <div class="offense-reports">
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #1</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Missing top-level class documentation comment.</span>
+            </div>
+            
+            <pre><code><span class="highlight convention">class</span> Country < ActiveRecord::Base</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #6</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Trailing whitespace detected.</span>
+            </div>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #8</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Trailing whitespace detected.</span>
+            </div>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #11</span> –
+              <span class="severity warning">warning:</span>
+              <span class="message">Useless assignment to variable - <code>results</code>.</span>
+            </div>
+            
+            <pre><code>    <span class="highlight warning">results</span> = SpeedTestResult.select("speed_test_results.isp_company_id, MIN(isps.cable_price) AS cable_price, AVG(speed_test_results.download_kbps) AS avg_download_kbps, AVG(speed_test_results.download_kbps)/MIN(isps.cable_price) AS download_per_dollar").</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #11</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Prefer single-quoted strings when you don't need string interpolation or special symbols.</span>
+            </div>
+            
+            <pre><code>    results = SpeedTestResult.select(<span class="highlight convention">"speed_test_results.isp_company_id, MIN(isps.cable_price) AS cable_price, AVG(speed_test_results.download_kbps) AS avg_download_kbps, AVG(speed_test_results.download_kbps)/MIN(isps.cable_price) AS download_per_dollar"</span>).</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #11</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Line is too long. [256/80]</span>
+            </div>
+            
+            <pre><code>    results = SpeedTestResult.select("speed_test_results.isp_company_id, MIN(isp<span class="highlight convention">s.cable_price) AS cable_price, AVG(speed_test_results.download_kbps) AS avg_download_kbps, AVG(speed_test_results.download_kbps)/MIN(isps.cable_price) AS download_per_dollar").</span></code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #11</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Place the . on the next line, together with the method name.</span>
+            </div>
+            
+            <pre><code>    results = SpeedTestResult.select("speed_test_results.isp_company_id, MIN(isps.cable_price) AS cable_price, AVG(speed_test_results.download_kbps) AS avg_download_kbps, AVG(speed_test_results.download_kbps)/MIN(isps.cable_price) AS download_per_dollar")<span class="highlight convention">.</span></code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #12</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Align the operands of an expression in an assignment spanning multiple lines.</span>
+            </div>
+            
+            <pre><code>                <span class="highlight convention">joins</span>("JOIN isps ON isps.isp_company_id = speed_test_results.isp_company_id AND isps.city_id = speed_test_results.city_id").</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #12</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Prefer single-quoted strings when you don't need string interpolation or special symbols.</span>
+            </div>
+            
+            <pre><code>                joins(<span class="highlight convention">"JOIN isps ON isps.isp_company_id = speed_test_results.isp_company_id AND isps.city_id = speed_test_results.city_id"</span>).</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #12</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Line is too long. [140/80]</span>
+            </div>
+            
+            <pre><code>                joins("JOIN isps ON isps.isp_company_id = speed_test_results.isp<span class="highlight convention">_company_id AND isps.city_id = speed_test_results.city_id").</span></code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #12</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Place the . on the next line, together with the method name.</span>
+            </div>
+            
+            <pre><code>                joins("JOIN isps ON isps.isp_company_id = speed_test_results.isp_company_id AND isps.city_id = speed_test_results.city_id")<span class="highlight convention">.</span></code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #13</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Align the operands of an expression in an assignment spanning multiple lines.</span>
+            </div>
+            
+            <pre><code>                <span class="highlight convention">where</span>("isps.cable_price > 0").</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #13</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Prefer single-quoted strings when you don't need string interpolation or special symbols.</span>
+            </div>
+            
+            <pre><code>                where(<span class="highlight convention">"isps.cable_price > 0"</span>).</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #13</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Place the . on the next line, together with the method name.</span>
+            </div>
+            
+            <pre><code>                where("isps.cable_price > 0")<span class="highlight convention">.</span></code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #14</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Align the operands of an expression in an assignment spanning multiple lines.</span>
+            </div>
+            
+            <pre><code>                <span class="highlight convention">group</span>(:isp_company_id).</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #14</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Place the . on the next line, together with the method name.</span>
+            </div>
+            
+            <pre><code>                group(:isp_company_id)<span class="highlight convention">.</span></code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #15</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Align the operands of an expression in an assignment spanning multiple lines.</span>
+            </div>
+            
+            <pre><code>                <span class="highlight convention">order</span>("download_per_dollar DESC").</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #15</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Prefer single-quoted strings when you don't need string interpolation or special symbols.</span>
+            </div>
+            
+            <pre><code>                order(<span class="highlight convention">"download_per_dollar DESC"</span>).</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #15</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Place the . on the next line, together with the method name.</span>
+            </div>
+            
+            <pre><code>                order("download_per_dollar DESC")<span class="highlight convention">.</span></code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #16</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Align the operands of an expression in an assignment spanning multiple lines.</span>
+            </div>
+            
+            <pre><code>                <span class="highlight convention">joins</span>(:isp_company)</code></pre>
+            
+          </div>
+          
+        </div>
+      </div>
+      
+      
+      
+      <div class="offense-box">
+        <div class="box-title"><h3>models/isp.rb - 6 offenses</h3></div>
+        <div class="offense-reports">
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #1</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Missing top-level class documentation comment.</span>
+            </div>
+            
+            <pre><code><span class="highlight convention">class</span> Isp < ActiveRecord::Base</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #7</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Space inside { missing.</span>
+            </div>
+            
+            <pre><code>  validates :isp_company, uniqueness: <span class="highlight convention">{</span>scope: :city}</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #7</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Space inside } missing.</span>
+            </div>
+            
+            <pre><code>  validates :isp_company, uniqueness: {scope: :city<span class="highlight convention">}</span></code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #10</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Redundant <code>self</code> detected.</span>
+            </div>
+            
+            <pre><code>    SpeedTestResult.where(city: <span class="highlight convention">self.city</span>, isp_company: self.isp_company)</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #10</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Redundant <code>self</code> detected.</span>
+            </div>
+            
+            <pre><code>    SpeedTestResult.where(city: self.city, isp_company: <span class="highlight convention">self.isp_company</span>)</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #20</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Final newline missing.</span>
+            </div>
+            
+            <pre><code>end<span class="highlight convention"></span></code></pre>
+            
+          </div>
+          
+        </div>
+      </div>
+      
+      
+      
+      <div class="offense-box">
+        <div class="box-title"><h3>models/isp_company.rb - 3 offenses</h3></div>
+        <div class="offense-reports">
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #1</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Missing top-level class documentation comment.</span>
+            </div>
+            
+            <pre><code><span class="highlight convention">class</span> IspCompany < ActiveRecord::Base</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #5</span> –
+              <span class="severity warning">warning:</span>
+              <span class="message">Unused method argument - <code>city</code>. If it's necessary, use <code>_</code> or <code>_city</code> as an argument name to indicate that it won't be used. You can also write as <code>speed_test_results_for_city(*)</code> if you want the method to accept any arguments but don't care about them.</span>
+            </div>
+            
+            <pre><code>  def speed_test_results_for_city(<span class="highlight warning">city</span>)</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #6</span> –
+              <span class="severity warning">warning:</span>
+              <span class="message">Remove debugger entry point <code>debugger</code>.</span>
+            </div>
+            
+            <pre><code>    <span class="highlight warning">debugger</span></code></pre>
+            
+          </div>
+          
+        </div>
+      </div>
+      
+      
+      
+      <div class="offense-box">
+        <div class="box-title"><h3>models/province.rb - 1 offense</h3></div>
+        <div class="offense-reports">
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #1</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Missing top-level class documentation comment.</span>
+            </div>
+            
+            <pre><code><span class="highlight convention">class</span> Province < ActiveRecord::Base</code></pre>
+            
+          </div>
+          
+        </div>
+      </div>
+      
+      
+      
+      <div class="offense-box">
+        <div class="box-title"><h3>models/recommendation.rb - 3 offenses</h3></div>
+        <div class="offense-reports">
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #1</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Missing top-level class documentation comment.</span>
+            </div>
+            
+            <pre><code><span class="highlight convention">class</span> Recommendation</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #5</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Trailing whitespace detected.</span>
+            </div>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #13</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Final newline missing.</span>
+            </div>
+            
+            <pre><code>end<span class="highlight convention"></span></code></pre>
+            
+          </div>
+          
+        </div>
+      </div>
+      
+      
+      
+      <div class="offense-box">
+        <div class="box-title"><h3>models/speed_test_result.rb - 5 offenses</h3></div>
+        <div class="offense-reports">
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #1</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Missing top-level class documentation comment.</span>
+            </div>
+            
+            <pre><code><span class="highlight convention">class</span> SpeedTestResult < ActiveRecord::Base</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #5</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Line is too long. [115/80]</span>
+            </div>
+            
+            <pre><code>  validates :city, :isp_company, :download_kbps, :upload_kbps, :date, :total_tes<span class="highlight convention">ts, :distance_miles, presence: true</span></code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #7</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Space inside { missing.</span>
+            </div>
+            
+            <pre><code>  validates :date, uniqueness: <span class="highlight convention">{</span>scope: [:city, :isp_company, :download_kbps, :upload_kbps]}</code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #7</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Line is too long. [91/80]</span>
+            </div>
+            
+            <pre><code>  validates :date, uniqueness: {scope: [:city, :isp_company, :download_kbps, :up<span class="highlight convention">load_kbps]}</span></code></pre>
+            
+          </div>
+          
+          <div class="report">
+            <div class="meta">
+              <span class="location">Line #7</span> –
+              <span class="severity convention">convention:</span>
+              <span class="message">Space inside } missing.</span>
+            </div>
+            
+            <pre><code>  validates :date, uniqueness: {scope: [:city, :isp_company, :download_kbps, :upload_kbps]<span class="highlight convention">}</span></code></pre>
+            
+          </div>
+          
+        </div>
+      </div>
+      
+      
+    </div>
+    <footer>
+      Generated by <a href="https://github.com/bbatsov/rubocop">RuboCop</a>
+      <span class="version">0.27.1</span>
+    </footer>
+  </body>
+</html>
